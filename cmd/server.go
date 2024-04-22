@@ -18,5 +18,5 @@ func main() {
 	}
 	server := application.New(conn)
 	server.RegisterAPIRoutes()
-	server.Logger.Fatal(server.Start("127.0.0.1:1323"))
+	server.Logger.Fatal(server.Start(":1323"))
 }

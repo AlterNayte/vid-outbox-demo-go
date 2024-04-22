@@ -1,0 +1,45 @@
+###
+PUT http://localhost:8083/connectors/outbox-1.0.0/config
+Content-Type: application/json
+
+{
+  "name": "outbox-1.0.0",
+  "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+  "database.hostname": "postgres",
+  "database.port": "5432",
+  "database.user": "postgres",
+  "database.password": "postgres",
+  "database.dbname": "postgres",
+  "database.server.name": "outbox",
+  "table.include.list": "public.outbox",
+  "transforms": "outbox,unwrap",
+  "transforms.outbox.type": "io.debezium.transforms.outbox.EventRouter",
+  "transforms.outbox.table.fields.additional.placement": "type:header:eventType",
+  "transforms.outbox.table.expand.json.payload": "true",
+  "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+  "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+  "value.converter": "io.confluent.connect.avro.AvroConverter",
+  "value.converter.schema.registry.url": "http://redpanda:8081",
+  "time.precision.mode": "connect",
+  "plugin.name": "pgoutput",
+  "slot.name": "outbox",
+  "topic.creation.default.replication.factor": "1",
+  "topic.creation.default.partitions": "1",
+  "topic.prefix": "outbox"
+}
+
+###
+POST http://localhost:1323/api/games
+Content-Type: application/json
+
+{
+  "entity_id": 3,
+  "name": "Super Mario Bros 3",
+  "summary": "Super Mario Bros 3 is a platform video game developed and published by Nintendo for the Nintendo Entertainment System (NES). It was released in Japan on October 23, 1988, in North America on February 12, 1990 and in Europe on August 29, 1991.",
+  "releaseDate": "1988-10-23T00:00:00Z"
+}
+
+
+###
+GET http://localhost:1323/api/games
+Content-Type: application/json
